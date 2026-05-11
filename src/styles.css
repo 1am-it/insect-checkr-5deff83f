@@ -49,6 +49,9 @@
   --color-safe-foreground: var(--safe-foreground);
   --color-warn: var(--warn);
   --color-warn-foreground: var(--warn-foreground);
+  --color-alert-accent: var(--alert-accent);
+  --color-safe-accent: var(--safe-accent);
+  --color-warn-accent: var(--warn-accent);
   --color-sun: var(--sun);
   --color-mint: var(--mint);
   --color-sky: var(--sky);
