@@ -6,7 +6,7 @@ const API_BASE = "https://insect-alert.vercel.app";
  *  - "niet-gevonden" → niets gevonden / waarschijnlijk schoon
  *  - "onzeker"       → niet zeker (fallback)
  */
-export type ScanState = "gevonden" | "niet-gevonden" | "onzeker";
+export type ScanState = "gevonden" | "niet-gevonden" | "twijfel";
 
 export interface ScanMatch {
   id: string;
