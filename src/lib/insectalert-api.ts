@@ -1,18 +1,27 @@
 const API_BASE = "https://insect-alert.vercel.app";
 
-export type Verdict = "contains_insect" | "no_insect" | "uncertain";
+/**
+ * Backend states observed:
+ *  - "gevonden"      → insect-ingrediënt(en) gevonden
+ *  - "niet-gevonden" → niets gevonden / waarschijnlijk schoon
+ *  - "onzeker"       → niet zeker (fallback)
+ */
+export type ScanState = "gevonden" | "niet-gevonden" | "onzeker";
 
 export interface ScanMatch {
-  ingredient: string;
-  reason?: string;
-  insect_name?: string;
+  id: string;
+  type: string;
+  nlName: string;
+  latinName?: string;
+  decoderText?: string;
+  certainty?: "high" | "medium" | "low" | string;
+  snippet?: string;
+  pending?: boolean;
 }
 
 export interface ScanResult {
-  verdict: Verdict;
-  matches?: ScanMatch[];
-  explanation?: string;
-  raw?: unknown;
+  state: ScanState;
+  matches: ScanMatch[];
 }
 
 export class ScanError extends Error {
@@ -23,11 +32,6 @@ export class ScanError extends Error {
   }
 }
 
-/**
- * POST /api/scan-text — backend is open-CORS.
- * Shape is permissive: we surface whatever the backend returns and
- * normalize the verdict if present.
- */
 export async function scanText(text: string, signal?: AbortSignal): Promise<ScanResult> {
   const res = await fetch(`${API_BASE}/api/scan-text`, {
     method: "POST",
@@ -37,7 +41,7 @@ export async function scanText(text: string, signal?: AbortSignal): Promise<Scan
   });
 
   if (!res.ok) {
-    let detail = `HTTP ${res.status}`;
+    let detail = `Er ging iets mis (HTTP ${res.status})`;
     try {
       const body = await res.json();
       if (body?.error) detail = String(body.error);
@@ -45,12 +49,9 @@ export async function scanText(text: string, signal?: AbortSignal): Promise<Scan
     throw new ScanError(detail, res.status);
   }
 
-  const data = (await res.json()) as Partial<ScanResult> & Record<string, unknown>;
-  const verdict = (data.verdict as Verdict) ?? "uncertain";
+  const data = (await res.json()) as Partial<ScanResult>;
   return {
-    verdict,
-    matches: (data.matches as ScanMatch[]) ?? [],
-    explanation: (data.explanation as string) ?? undefined,
-    raw: data,
+    state: (data.state as ScanState) ?? "onzeker",
+    matches: Array.isArray(data.matches) ? data.matches : [],
   };
 }

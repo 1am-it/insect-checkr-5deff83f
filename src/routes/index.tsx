@@ -188,15 +188,21 @@ function ResultState({
   result: ScanResult;
   onReset: () => void;
 }) {
-  const v = result.verdict;
-  const isAlert = v === "contains_insect";
-  const isSafe = v === "no_insect";
+  const s = result.state;
+  const isAlert = s === "gevonden";
+  const isSafe = s === "niet-gevonden";
 
   const headline = isAlert
     ? "Ja, dit bevat insect"
     : isSafe
-    ? "Nee, geen insect gevonden"
+    ? "Geen insect gevonden"
     : "Niet helemaal zeker";
+
+  const sub = isAlert
+    ? `We vonden ${result.matches.length} insect-ingrediënt${result.matches.length === 1 ? "" : "en"} in de lijst.`
+    : isSafe
+    ? "Op basis van de ingrediëntenlijst lijkt dit product geen insect te bevatten."
+    : "We konden geen duidelijk antwoord geven op basis van deze tekst.";
 
   const badge = isAlert ? "Insect-alert" : isSafe ? "Veilig" : "Onzeker";
   const badgeTone: "alert" | "safe" | "warn" = isAlert ? "alert" : isSafe ? "safe" : "warn";
@@ -216,32 +222,37 @@ function ResultState({
           <h2 className="mt-5 font-display text-3xl font-bold leading-tight">
             {headline}
           </h2>
-          {result.explanation && (
-            <p className="mt-2 text-base opacity-90">{result.explanation}</p>
-          )}
+          <p className="mt-2 text-base opacity-90">{sub}</p>
         </StickerCard>
       </div>
 
-      {result.matches && result.matches.length > 0 && (
+      {result.matches.length > 0 && (
         <StickerCard tone="white" rotate={0.5} className="p-5">
           <h3 className="mb-3 font-display text-lg font-bold text-ink">
             Gevonden ingrediënten
           </h3>
           <ul className="space-y-3">
-            {result.matches.map((m, i) => (
+            {result.matches.map((m) => (
               <li
-                key={i}
-                className="flex gap-3 rounded-xl border-2 border-ink bg-cream px-3 py-2"
+                key={m.id}
+                className="flex gap-3 rounded-xl border-2 border-ink bg-cream px-3 py-3"
               >
-                <IconSticker tone="alert" size={36} rotate={-4} className="shrink-0">
+                <IconSticker tone="alert" size={40} rotate={-4} className="shrink-0">
                   <Bug className="h-4 w-4 text-alert-foreground" strokeWidth={2.5} />
                 </IconSticker>
                 <div className="min-w-0">
-                  <div className="font-semibold text-ink">{m.ingredient}</div>
-                  {m.insect_name && (
-                    <div className="text-sm italic text-ink/70">{m.insect_name}</div>
+                  <div className="font-semibold text-ink">{m.nlName}</div>
+                  {m.latinName && (
+                    <div className="text-sm italic text-ink/60">{m.latinName}</div>
                   )}
-                  {m.reason && <div className="text-sm text-ink/70">{m.reason}</div>}
+                  {m.decoderText && (
+                    <p className="mt-1 text-sm text-ink/75">{m.decoderText}</p>
+                  )}
+                  {m.snippet && (
+                    <div className="mt-2 rounded-md border border-ink/20 bg-card px-2 py-1 text-xs text-ink/70">
+                      “{m.snippet}”
+                    </div>
+                  )}
                 </div>
               </li>
             ))}
