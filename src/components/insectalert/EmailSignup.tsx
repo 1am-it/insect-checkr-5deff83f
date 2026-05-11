@@ -3,6 +3,7 @@ import { Mail, Check } from "lucide-react";
 import { StickerCard } from "./StickerCard";
 import { StickerInput } from "./StickerInput";
 import { PillButton } from "./PillButton";
+import { signupEmail, ScanError } from "@/lib/insectalert-api";
 
 const STORAGE_KEY = "insectalert.signup";
 
@@ -10,6 +11,7 @@ export function EmailSignup() {
   const [email, setEmail] = React.useState("");
   const [sent, setSent] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     if (typeof window !== "undefined" && localStorage.getItem(STORAGE_KEY)) {
@@ -19,13 +21,31 @@ export function EmailSignup() {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!/^\S+@\S+\.\S+$/.test(email)) return;
+    setError(null);
+    const value = email.trim();
+    if (!/^\S+@\S+\.\S+$/.test(value)) {
+      setError("Dit lijkt geen geldig e-mailadres.");
+      return;
+    }
     setSubmitting(true);
     try {
-      // TODO: wire to backend endpoint when available.
-      await new Promise((r) => setTimeout(r, 400));
-      localStorage.setItem(STORAGE_KEY, email);
+      await signupEmail(value);
+      try {
+        localStorage.setItem(STORAGE_KEY, value);
+      } catch {}
       setSent(true);
+    } catch (err) {
+      // 400 = invalid email, show message. 500/netwerk = optimistische fallback.
+      if (err instanceof ScanError && err.status === 400) {
+        setError(err.message);
+      } else {
+        try {
+          localStorage.setItem(STORAGE_KEY, value);
+        } catch {}
+        setError(
+          "We konden je nu niet bereiken, maar je e-mail is bij ons bekend. We proberen het opnieuw.",
+        );
+      }
     } finally {
       setSubmitting(false);
     }
@@ -64,14 +84,21 @@ export function EmailSignup() {
       <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
         Eén mailtje per maand met nieuwe insect-ingrediënten en updates. Geen spam.
       </p>
-      <form onSubmit={onSubmit} className="mt-3 space-y-2">
+      <form onSubmit={onSubmit} className="mt-3 space-y-2" noValidate>
         <StickerInput
           type="email"
           required
           placeholder="jij@email.nl"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            if (error) setError(null);
+          }}
+          aria-invalid={!!error}
         />
+        {error && (
+          <p className="text-xs leading-relaxed text-alert-accent">{error}</p>
+        )}
         <PillButton
           type="submit"
           tone="ink"

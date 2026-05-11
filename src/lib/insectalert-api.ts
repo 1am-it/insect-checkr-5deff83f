@@ -52,6 +52,34 @@ export async function scanText(text: string, signal?: AbortSignal): Promise<Scan
   return parseOrThrow(res);
 }
 
+export interface SignupResult {
+  ok: true;
+  alreadySignedUp?: boolean;
+}
+
+export async function signupEmail(email: string, signal?: AbortSignal): Promise<SignupResult> {
+  const res = await fetch(`${API_BASE}/api/signup`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+    signal,
+  });
+  let body: any = null;
+  try {
+    body = await res.json();
+  } catch {}
+  if (!res.ok) {
+    const code = body?.error === "invalid_email" ? 400 : res.status;
+    const msg =
+      body?.message ||
+      (body?.error === "invalid_email"
+        ? "Dit lijkt geen geldig e-mailadres."
+        : "Er ging iets mis. Probeer het zo nog eens.");
+    throw new ScanError(msg, code);
+  }
+  return { ok: true, alreadySignedUp: !!body?.alreadySignedUp };
+}
+
 export async function scanPhoto(blob: Blob, signal?: AbortSignal): Promise<ScanResult> {
   const res = await fetch(`${API_BASE}/api/scan-photo`, {
     method: "POST",
