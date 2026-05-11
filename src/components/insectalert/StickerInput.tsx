@@ -8,7 +8,7 @@ export const StickerTextarea = React.forwardRef<
   <textarea
     ref={ref}
     className={cn(
-      "w-full rounded-2xl border-2 border-ink bg-card px-4 py-3 text-base text-ink placeholder:text-muted-foreground shadow-[3px_3px_0_0_var(--ink)] focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2 focus:ring-offset-cream resize-none",
+      "w-full rounded-2xl border border-border bg-card px-4 py-3 text-base text-ink placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 resize-none transition-colors",
       className,
     )}
     {...props}
@@ -23,7 +23,7 @@ export const StickerInput = React.forwardRef<
   <input
     ref={ref}
     className={cn(
-      "h-12 w-full rounded-full border-2 border-ink bg-card px-5 text-base text-ink placeholder:text-muted-foreground shadow-[3px_3px_0_0_var(--ink)] focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2 focus:ring-offset-cream",
+      "h-12 w-full rounded-full border border-border bg-card px-5 text-base text-ink placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-colors",
       className,
     )}
     {...props}

@@ -3,21 +3,21 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const pill = cva(
-  "inline-flex items-center justify-center gap-2 rounded-full border-2 border-ink font-semibold transition-transform active:translate-y-0.5 active:translate-x-0.5 active:shadow-none disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-cream",
+  "inline-flex items-center justify-center gap-2 rounded-full font-medium transition-all disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]",
   {
     variants: {
       tone: {
-        ink: "bg-ink text-cream",
-        cream: "bg-cream text-ink",
-        alert: "bg-alert text-alert-foreground",
-        safe: "bg-safe text-safe-foreground",
-        sun: "bg-sun text-ink",
-        sky: "bg-sky text-ink",
+        ink: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_1px_2px_rgba(0,0,0,0.06),0_6px_16px_rgba(0,0,0,0.08)]",
+        cream: "bg-card text-ink border border-border hover:bg-cream",
+        alert: "bg-alert-accent text-primary-foreground hover:opacity-90",
+        safe: "bg-safe-accent text-primary-foreground hover:opacity-90",
+        sun: "bg-sun text-ink hover:opacity-90",
+        sky: "bg-sky text-ink hover:opacity-90",
       },
       size: {
-        sm: "h-9 px-4 text-sm shadow-[2px_2px_0_0_var(--ink)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0_0_var(--ink)]",
-        md: "h-12 px-6 text-base shadow-[4px_4px_0_0_var(--ink)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[3px_3px_0_0_var(--ink)]",
-        lg: "h-14 px-8 text-lg shadow-[5px_5px_0_0_var(--ink)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[4px_4px_0_0_var(--ink)]",
+        sm: "h-9 px-4 text-sm",
+        md: "h-11 px-5 text-sm",
+        lg: "h-14 px-7 text-base",
       },
     },
     defaultVariants: { tone: "ink", size: "md" },
