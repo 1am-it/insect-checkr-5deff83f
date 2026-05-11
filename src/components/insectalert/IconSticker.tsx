@@ -1,47 +1,44 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-type Tone = "sun" | "mint" | "sky" | "coral" | "alert" | "safe" | "warn" | "cream";
+type Tone = "sun" | "mint" | "sky" | "coral" | "alert" | "safe" | "warn" | "cream" | "ink";
 
 const tones: Record<Tone, string> = {
-  sun: "bg-sun",
-  mint: "bg-mint",
-  sky: "bg-sky",
-  coral: "bg-coral",
+  sun: "bg-sun text-ink",
+  mint: "bg-mint text-ink",
+  sky: "bg-sky text-ink",
+  coral: "bg-coral text-ink",
   alert: "bg-alert text-alert-foreground",
   safe: "bg-safe text-safe-foreground",
   warn: "bg-warn text-warn-foreground",
-  cream: "bg-cream",
+  cream: "bg-cream text-ink",
+  ink: "bg-primary/10 text-primary",
 };
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   tone?: Tone;
+  /** kept for API back-compat; ignored. */
   rotate?: number;
   size?: number;
 }
 
 export function IconSticker({
-  tone = "sun",
-  rotate = -6,
-  size = 56,
+  tone = "cream",
+  size = 48,
   className,
   style,
+  rotate: _rotate,
   children,
   ...props
 }: Props) {
   return (
     <div
       className={cn(
-        "inline-flex items-center justify-center rounded-2xl border-2 border-ink text-ink shadow-[3px_3px_0_0_var(--ink)]",
+        "inline-flex items-center justify-center rounded-2xl",
         tones[tone],
         className,
       )}
-      style={{
-        width: size,
-        height: size,
-        transform: `rotate(${rotate}deg)`,
-        ...style,
-      }}
+      style={{ width: size, height: size, ...style }}
       {...props}
     >
       {children}
