@@ -1,11 +1,5 @@
 const API_BASE = "https://insect-alert.vercel.app";
 
-/**
- * Backend states observed:
- *  - "gevonden"      → insect-ingrediënt(en) gevonden
- *  - "niet-gevonden" → niets gevonden / waarschijnlijk schoon
- *  - "twijfel"       → niet zeker
- */
 export type ScanState = "gevonden" | "niet-gevonden" | "twijfel";
 
 export interface ScanMatch {
@@ -32,14 +26,7 @@ export class ScanError extends Error {
   }
 }
 
-export async function scanText(text: string, signal?: AbortSignal): Promise<ScanResult> {
-  const res = await fetch(`${API_BASE}/api/scan-text`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text }),
-    signal,
-  });
-
+async function parseOrThrow(res: Response): Promise<ScanResult> {
   if (!res.ok) {
     let detail = `Er ging iets mis (HTTP ${res.status})`;
     try {
@@ -48,10 +35,29 @@ export async function scanText(text: string, signal?: AbortSignal): Promise<Scan
     } catch {}
     throw new ScanError(detail, res.status);
   }
-
   const data = (await res.json()) as Partial<ScanResult>;
   return {
     state: (data.state as ScanState) ?? "twijfel",
     matches: Array.isArray(data.matches) ? data.matches : [],
   };
+}
+
+export async function scanText(text: string, signal?: AbortSignal): Promise<ScanResult> {
+  const res = await fetch(`${API_BASE}/api/scan-text`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+    signal,
+  });
+  return parseOrThrow(res);
+}
+
+export async function scanPhoto(blob: Blob, signal?: AbortSignal): Promise<ScanResult> {
+  const res = await fetch(`${API_BASE}/api/scan-photo`, {
+    method: "POST",
+    headers: { "Content-Type": blob.type || "image/jpeg" },
+    body: blob,
+    signal,
+  });
+  return parseOrThrow(res);
 }
