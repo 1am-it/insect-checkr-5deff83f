@@ -4,9 +4,9 @@ const API_BASE = "https://insect-alert.vercel.app";
  * Backend states observed:
  *  - "gevonden"      → insect-ingrediënt(en) gevonden
  *  - "niet-gevonden" → niets gevonden / waarschijnlijk schoon
- *  - "onzeker"       → niet zeker (fallback)
+ *  - "twijfel"       → niet zeker
  */
-export type ScanState = "gevonden" | "niet-gevonden" | "onzeker";
+export type ScanState = "gevonden" | "niet-gevonden" | "twijfel";
 
 export interface ScanMatch {
   id: string;
@@ -51,7 +51,7 @@ export async function scanText(text: string, signal?: AbortSignal): Promise<Scan
 
   const data = (await res.json()) as Partial<ScanResult>;
   return {
-    state: (data.state as ScanState) ?? "onzeker",
+    state: (data.state as ScanState) ?? "twijfel",
     matches: Array.isArray(data.matches) ? data.matches : [],
   };
 }
