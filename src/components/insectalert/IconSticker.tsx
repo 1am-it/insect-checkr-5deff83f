@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-type Tone = "sun" | "mint" | "sky" | "coral" | "alert" | "safe" | "cream";
+type Tone = "sun" | "mint" | "sky" | "coral" | "alert" | "safe" | "warn" | "cream";
 
 const tones: Record<Tone, string> = {
   sun: "bg-sun",
@@ -10,6 +10,7 @@ const tones: Record<Tone, string> = {
   coral: "bg-coral",
   alert: "bg-alert text-alert-foreground",
   safe: "bg-safe text-safe-foreground",
+  warn: "bg-warn text-warn-foreground",
   cream: "bg-cream",
 };
 
