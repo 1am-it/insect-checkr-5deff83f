@@ -4,7 +4,7 @@ const API_BASE = "https://insect-alert.vercel.app";
  * Backend states observed:
  *  - "gevonden"      → insect-ingrediënt(en) gevonden
  *  - "niet-gevonden" → niets gevonden / waarschijnlijk schoon
- *  - "onzeker"       → niet zeker (fallback)
+ *  - "twijfel"       → niet zeker
  */
 export type ScanState = "gevonden" | "niet-gevonden" | "twijfel";
 
