@@ -107,7 +107,7 @@ function Index() {
           ) : (
             <>
               <Intro />
-              <ModeSwitch mode={mode} setMode={(m) => { setMode(m); reset(); setMode(m); }} />
+              <ModeSwitch mode={mode} setMode={setMode} />
               {mode === "paste" ? (
                 <PasteForm
                   text={text}
