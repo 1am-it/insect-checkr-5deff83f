@@ -45,6 +45,7 @@ function Index() {
 
   const reset = () => {
     mutation.reset();
+    setText("");
   };
 
   return (
