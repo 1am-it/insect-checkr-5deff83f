@@ -51,7 +51,7 @@ export async function scanText(text: string, signal?: AbortSignal): Promise<Scan
 
   const data = (await res.json()) as Partial<ScanResult>;
   return {
-    state: (data.state as ScanState) ?? "onzeker",
+    state: (data.state as ScanState) ?? "twijfel",
     matches: Array.isArray(data.matches) ? data.matches : [],
   };
 }
