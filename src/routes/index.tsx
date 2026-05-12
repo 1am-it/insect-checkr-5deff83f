@@ -142,7 +142,7 @@ function Header() {
         <span className="inline-flex h-16 w-16 -rotate-[4deg] items-center justify-center rounded-full border-4 border-card bg-primary/15 shadow-sm">
           <Leaf className="h-8 w-8 text-ink" strokeWidth={2} />
         </span>
-        <span className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border-2 border-card bg-peach shadow-sm" />
+        <span className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border-2 border-card bg-alert shadow-sm" />
       </span>
       <h1 className="font-display text-[40px] font-semibold leading-none tracking-tight text-ink">
         Insect<span className="ml-0.5 text-primary">Alert</span>
