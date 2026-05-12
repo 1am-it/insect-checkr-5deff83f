@@ -137,13 +137,16 @@ function Index() {
 
 function Header() {
   return (
-    <header className="mb-8 flex items-center gap-2.5">
-      <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
-        <Leaf className="h-4 w-4 text-primary" strokeWidth={2.25} />
+    <header className="mb-10 flex items-center gap-4 select-none">
+      <span className="relative inline-flex">
+        <span className="inline-flex h-16 w-16 -rotate-[4deg] items-center justify-center rounded-full border-4 border-card bg-primary/15 shadow-sm">
+          <Leaf className="h-8 w-8 text-ink" strokeWidth={2} />
+        </span>
+        <span className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border-2 border-card bg-peach shadow-sm" />
       </span>
-      <span className="font-display text-xl font-semibold tracking-tight text-ink">
-        Insect<span className="text-primary"> alert</span>
-      </span>
+      <h1 className="font-display text-[40px] font-semibold leading-none tracking-tight text-ink">
+        Insect<span className="ml-0.5 text-primary">Alert</span>
+      </h1>
     </header>
   );
 }
