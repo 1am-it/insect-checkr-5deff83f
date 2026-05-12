@@ -205,7 +205,7 @@ function PasteForm({
       <StickerCard tone="white" className="p-5">
         <label
           htmlFor="ingredients"
-          className="mb-2.5 block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+          className="mb-2.5 block px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground"
         >
           Ingrediëntenlijst
         </label>
@@ -215,7 +215,7 @@ function PasteForm({
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="Plak hier de ingrediëntenlijst van het product..."
-          className="border-0 bg-transparent p-0 focus:ring-0 focus:border-transparent"
+          className="border-0 bg-transparent px-2 py-0 focus:ring-0 focus:border-transparent"
         />
         <div className="mt-4 border-t border-border/60 pt-4">
           <PillButton
