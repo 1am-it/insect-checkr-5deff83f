@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PreviewProductenRouteImport } from './routes/preview.producten'
+import { Route as PreviewDecoderCardRouteImport } from './routes/preview.decoder-card'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,30 +23,39 @@ const PreviewProductenRoute = PreviewProductenRouteImport.update({
   path: '/preview/producten',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PreviewDecoderCardRoute = PreviewDecoderCardRouteImport.update({
+  id: '/preview/decoder-card',
+  path: '/preview/decoder-card',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/preview/decoder-card': typeof PreviewDecoderCardRoute
   '/preview/producten': typeof PreviewProductenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/preview/decoder-card': typeof PreviewDecoderCardRoute
   '/preview/producten': typeof PreviewProductenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/preview/decoder-card': typeof PreviewDecoderCardRoute
   '/preview/producten': typeof PreviewProductenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/preview/producten'
+  fullPaths: '/' | '/preview/decoder-card' | '/preview/producten'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/preview/producten'
-  id: '__root__' | '/' | '/preview/producten'
+  to: '/' | '/preview/decoder-card' | '/preview/producten'
+  id: '__root__' | '/' | '/preview/decoder-card' | '/preview/producten'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PreviewDecoderCardRoute: typeof PreviewDecoderCardRoute
   PreviewProductenRoute: typeof PreviewProductenRoute
 }
 
@@ -65,13 +75,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PreviewProductenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/preview/decoder-card': {
+      id: '/preview/decoder-card'
+      path: '/preview/decoder-card'
+      fullPath: '/preview/decoder-card'
+      preLoaderRoute: typeof PreviewDecoderCardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PreviewDecoderCardRoute: PreviewDecoderCardRoute,
   PreviewProductenRoute: PreviewProductenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
