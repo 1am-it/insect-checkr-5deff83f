@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PreviewProductenRouteImport } from './routes/preview.producten'
+import { Route as PreviewDeflectionCardRouteImport } from './routes/preview.deflection-card'
 import { Route as PreviewDecoderCardRouteImport } from './routes/preview.decoder-card'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const PreviewProductenRoute = PreviewProductenRouteImport.update({
   path: '/preview/producten',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PreviewDeflectionCardRoute = PreviewDeflectionCardRouteImport.update({
+  id: '/preview/deflection-card',
+  path: '/preview/deflection-card',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PreviewDecoderCardRoute = PreviewDecoderCardRouteImport.update({
   id: '/preview/decoder-card',
   path: '/preview/decoder-card',
@@ -32,30 +38,47 @@ const PreviewDecoderCardRoute = PreviewDecoderCardRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/preview/decoder-card': typeof PreviewDecoderCardRoute
+  '/preview/deflection-card': typeof PreviewDeflectionCardRoute
   '/preview/producten': typeof PreviewProductenRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/preview/decoder-card': typeof PreviewDecoderCardRoute
+  '/preview/deflection-card': typeof PreviewDeflectionCardRoute
   '/preview/producten': typeof PreviewProductenRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/preview/decoder-card': typeof PreviewDecoderCardRoute
+  '/preview/deflection-card': typeof PreviewDeflectionCardRoute
   '/preview/producten': typeof PreviewProductenRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/preview/decoder-card' | '/preview/producten'
+  fullPaths:
+    | '/'
+    | '/preview/decoder-card'
+    | '/preview/deflection-card'
+    | '/preview/producten'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/preview/decoder-card' | '/preview/producten'
-  id: '__root__' | '/' | '/preview/decoder-card' | '/preview/producten'
+  to:
+    | '/'
+    | '/preview/decoder-card'
+    | '/preview/deflection-card'
+    | '/preview/producten'
+  id:
+    | '__root__'
+    | '/'
+    | '/preview/decoder-card'
+    | '/preview/deflection-card'
+    | '/preview/producten'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PreviewDecoderCardRoute: typeof PreviewDecoderCardRoute
+  PreviewDeflectionCardRoute: typeof PreviewDeflectionCardRoute
   PreviewProductenRoute: typeof PreviewProductenRoute
 }
 
@@ -75,6 +98,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PreviewProductenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/preview/deflection-card': {
+      id: '/preview/deflection-card'
+      path: '/preview/deflection-card'
+      fullPath: '/preview/deflection-card'
+      preLoaderRoute: typeof PreviewDeflectionCardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/preview/decoder-card': {
       id: '/preview/decoder-card'
       path: '/preview/decoder-card'
@@ -88,6 +118,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PreviewDecoderCardRoute: PreviewDecoderCardRoute,
+  PreviewDeflectionCardRoute: PreviewDeflectionCardRoute,
   PreviewProductenRoute: PreviewProductenRoute,
 }
 export const routeTree = rootRouteImport
