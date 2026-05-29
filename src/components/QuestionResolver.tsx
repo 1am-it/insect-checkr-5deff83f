@@ -1,6 +1,7 @@
 import * as React from "react";
 import { DecoderCard } from "@/components/DecoderCard";
 import { DeflectionCard } from "@/components/DeflectionCard";
+import { ClarificationCard } from "@/components/ClarificationCard";
 import { StickerCard } from "@/components/insectalert/StickerCard";
 import { Blob } from "@/components/insectalert/Blob";
 
@@ -67,6 +68,16 @@ export function QuestionResolver({ classifierResponse }: QuestionResolverProps) 
           deflectionTarget as React.ComponentProps<
             typeof DeflectionCard
           >["deflectionTarget"]
+        }
+      />
+    );
+  }
+
+  if (component === "clarification-card") {
+    return (
+      <ClarificationCard
+        dataQuery={
+          dataQuery as React.ComponentProps<typeof ClarificationCard>["dataQuery"]
         }
       />
     );
