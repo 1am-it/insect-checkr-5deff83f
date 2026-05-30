@@ -4,19 +4,9 @@ import { DeflectionCard } from "@/components/DeflectionCard";
 import { ClarificationCard } from "@/components/ClarificationCard";
 import { StickerCard } from "@/components/insectalert/StickerCard";
 import { Blob } from "@/components/insectalert/Blob";
+import type { ClassifierResponse } from "@/lib/insectalert-api";
 
-export type ClassifierResponse = {
-  category: "decoder" | "regulation" | "deflection" | "ambiguous";
-  component:
-    | "decoder-card"
-    | "list-card"
-    | "timeline-card"
-    | "deflection-card"
-    | "clarification-card";
-  dataQuery: Record<string, unknown>;
-  deflectionTarget: string | null;
-  confidence: "high" | "medium" | "low";
-};
+export type { ClassifierResponse };
 
 export type QuestionResolverProps = {
   classifierResponse: ClassifierResponse;

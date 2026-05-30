@@ -1,9 +1,7 @@
 import * as React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  QuestionResolver,
-  type ClassifierResponse,
-} from "@/components/QuestionResolver";
+import { QuestionResolver } from "@/components/QuestionResolver";
+import { useAskMore } from "@/hooks/useAskMore";
 import { Textarea } from "@/components/ui/textarea";
 import { PillButton } from "@/components/insectalert/PillButton";
 
@@ -19,52 +17,14 @@ export const Route = createFileRoute("/preview/vraag-meer")({
 
 function PreviewVraagMeerPage() {
   const [question, setQuestion] = React.useState("");
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
-  const [response, setResponse] = React.useState<ClassifierResponse | null>(null);
+  const ask = useAskMore();
 
-  const canSubmit = question.trim().length > 0 && !loading;
+  const canSubmit = question.trim().length > 0 && !ask.isPending;
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!canSubmit) return;
-
-    setLoading(true);
-    setError(null);
-    setResponse(null);
-
-    const apiBase =
-      import.meta.env.VITE_API_BASE_URL ?? "https://insect-alert.vercel.app";
-
-    try {
-      const res = await fetch(`${apiBase}/api/classify-question`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: question.trim() }),
-      });
-
-      if (!res.ok) {
-        try {
-          const errBody = await res.json();
-          setError(errBody.message ?? "Onbekende fout van de backend.");
-        } catch {
-          setError(
-            "De vraag kon niet worden geanalyseerd. Controleer of de backend draait.",
-          );
-        }
-        setLoading(false);
-        return;
-      }
-
-      const data: ClassifierResponse = await res.json();
-      setResponse(data);
-    } catch {
-      setError(
-        "De vraag kon niet worden geanalyseerd. Controleer of de backend draait.",
-      );
-    } finally {
-      setLoading(false);
-    }
+    ask.mutate(question.trim());
   }
 
   return (
@@ -103,17 +63,19 @@ function PreviewVraagMeerPage() {
         </form>
 
         <div aria-live="polite" className="min-h-[1.5rem]">
-          {loading && (
+          {ask.isPending && (
             <p className="text-sm text-muted-foreground">Bezig met analyseren...</p>
           )}
-          {error && !loading && (
-            <p className="text-sm font-medium text-destructive">{error}</p>
+          {ask.isError && !ask.isPending && (
+            <p className="text-sm font-medium text-destructive">
+              {ask.error.message}
+            </p>
           )}
         </div>
 
-        {response && !loading && (
+        {ask.data && !ask.isPending && (
           <section className="flex flex-col gap-3">
-            <QuestionResolver classifierResponse={response} />
+            <QuestionResolver classifierResponse={ask.data} />
           </section>
         )}
       </div>

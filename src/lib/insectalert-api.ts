@@ -18,6 +18,27 @@ export interface ScanResult {
   matches: ScanMatch[];
 }
 
+/**
+ * Classifier response shape for the "ask more" follow-up question flow.
+ * Returned by POST /api/classify-question. Consumed by QuestionResolver
+ * (which routes `component` to the right card) and the useAskMore hook.
+ *
+ * Lives here, in the API layer, so the dependency direction is
+ * component/hook → API (not API → component).
+ */
+export type ClassifierResponse = {
+  category: "decoder" | "regulation" | "deflection" | "ambiguous";
+  component:
+    | "decoder-card"
+    | "list-card"
+    | "timeline-card"
+    | "deflection-card"
+    | "clarification-card";
+  dataQuery: Record<string, unknown>;
+  deflectionTarget: string | null;
+  confidence: "high" | "medium" | "low";
+};
+
 export class ScanError extends Error {
   status?: number;
   constructor(message: string, status?: number) {
@@ -88,4 +109,30 @@ export async function scanPhoto(blob: Blob, signal?: AbortSignal): Promise<ScanR
     signal,
   });
   return parseOrThrow(res);
+}
+
+/**
+ * Ask a follow-up question about an ingredient or EU regulation.
+ * Returns a ClassifierResponse that QuestionResolver renders into a card.
+ * Same backend base as the scan endpoints — single source of truth.
+ */
+export async function askQuestion(
+  question: string,
+  signal?: AbortSignal,
+): Promise<ClassifierResponse> {
+  const res = await fetch(`${API_BASE}/api/classify-question`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question }),
+    signal,
+  });
+  if (!res.ok) {
+    let detail = "De vraag kon niet worden geanalyseerd. Probeer het zo nog eens.";
+    try {
+      const body = await res.json();
+      if (body?.message) detail = String(body.message);
+    } catch {}
+    throw new ScanError(detail, res.status);
+  }
+  return (await res.json()) as ClassifierResponse;
 }
