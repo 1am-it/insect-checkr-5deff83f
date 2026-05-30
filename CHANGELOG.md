@@ -7,7 +7,25 @@ en dit project volgt [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-Sprint 2 work in progress.
+## [0.4.0] - 2026-05-30
+
+### Added
+
+- Generative UI kaart-componenten voor vervolgvragen: DecoderCard (ingrediënt-uitleg),
+  DeflectionCard (doorverwijzing naar de juiste autoriteit) en ClarificationCard.
+- "Meer weten?" sectie in het scanresultaat — gebruikers kunnen na een scan een
+  vervolgvraag stellen over een ingrediënt of EU-regelgeving, met een contextuele
+  hint op basis van het gevonden ingrediënt. Optionele uitklap die de snelle-scan
+  niet verstoort.
+- Herbruikbare `useAskMore` hook + `askQuestion` API-functie voor de vraag-meer-flow.
+- Preview-routes voor losse componenten (decoder-card, deflection-card,
+  clarification-card, vraag-meer, ask-more-section) als ontwikkel-hulpmiddel.
+
+### Changed
+
+- `ClassifierResponse` type verplaatst naar de API-laag zodat de
+  dependency-richting component/hook → API is.
+- Doorverwijs-URL's in de deflectie-flow ingevuld met de echte autoriteiten.
 
 ## [0.3.0] - 2026-05-12
 
@@ -17,5 +35,6 @@ Sprint 2 work in progress.
   Workers runtime).
 - Custom domain live: [insect-alert.com](https://insect-alert.com).
 
-[Unreleased]: https://github.com/1am-it/insect-alert-frontend/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/1am-it/insect-alert-frontend/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/1am-it/insect-alert-frontend/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/1am-it/insect-alert-frontend/releases/tag/v0.3.0
