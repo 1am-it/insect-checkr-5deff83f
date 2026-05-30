@@ -14,11 +14,12 @@ import { cn } from "@/lib/utils";
 
 export type AskMoreSectionProps = {
   /**
-   * Optional starting text for the question field. Used to gently prefill
-   * with a found ingredient (e.g. "Wat wil je weten over karmijn?").
-   * Soft suggestion only — never auto-submits.
+   * Optional ingredient name for a contextual placeholder (e.g. "karmijn"
+   * → "Vraag iets over karmijn..."). Soft context hook only — does NOT
+   * prefill the textarea value and never auto-submits. The user always
+   * formulates their own question.
    */
-  prefill?: string;
+  subjectName?: string;
 };
 
 /**
@@ -30,9 +31,9 @@ export type AskMoreSectionProps = {
  *
  * Owns no backend logic — uses the useAskMore hook (which wraps askQuestion).
  */
-export function AskMoreSection({ prefill }: AskMoreSectionProps) {
+export function AskMoreSection({ subjectName }: AskMoreSectionProps) {
   const [open, setOpen] = React.useState(false);
-  const [question, setQuestion] = React.useState(prefill ?? "");
+  const [question, setQuestion] = React.useState("");
   const ask = useAskMore();
 
   const canSubmit = question.trim().length > 0 && !ask.isPending;
@@ -73,7 +74,11 @@ export function AskMoreSection({ prefill }: AskMoreSectionProps) {
           <Textarea
             value={question}
             onChange={(e) => setQuestion(e.target.value)}
-            placeholder="Bijvoorbeeld: Wat is karmijn? Of: Sinds wanneer mag dit in voeding?"
+            placeholder={
+              subjectName
+                ? `Vraag iets over ${subjectName}...`
+                : "Stel een vervolgvraag over een ingrediënt of EU-regelgeving..."
+            }
             maxLength={1000}
             rows={3}
             className="resize-y rounded-2xl"

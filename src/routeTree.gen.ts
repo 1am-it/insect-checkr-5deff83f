@@ -15,6 +15,7 @@ import { Route as PreviewProductenRouteImport } from './routes/preview.producten
 import { Route as PreviewDeflectionCardRouteImport } from './routes/preview.deflection-card'
 import { Route as PreviewDecoderCardRouteImport } from './routes/preview.decoder-card'
 import { Route as PreviewClarificationCardRouteImport } from './routes/preview.clarification-card'
+import { Route as PreviewAskMoreSectionRouteImport } from './routes/preview.ask-more-section'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -47,9 +48,15 @@ const PreviewClarificationCardRoute =
     path: '/preview/clarification-card',
     getParentRoute: () => rootRouteImport,
   } as any)
+const PreviewAskMoreSectionRoute = PreviewAskMoreSectionRouteImport.update({
+  id: '/preview/ask-more-section',
+  path: '/preview/ask-more-section',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/preview/ask-more-section': typeof PreviewAskMoreSectionRoute
   '/preview/clarification-card': typeof PreviewClarificationCardRoute
   '/preview/decoder-card': typeof PreviewDecoderCardRoute
   '/preview/deflection-card': typeof PreviewDeflectionCardRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/preview/ask-more-section': typeof PreviewAskMoreSectionRoute
   '/preview/clarification-card': typeof PreviewClarificationCardRoute
   '/preview/decoder-card': typeof PreviewDecoderCardRoute
   '/preview/deflection-card': typeof PreviewDeflectionCardRoute
@@ -67,6 +75,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/preview/ask-more-section': typeof PreviewAskMoreSectionRoute
   '/preview/clarification-card': typeof PreviewClarificationCardRoute
   '/preview/decoder-card': typeof PreviewDecoderCardRoute
   '/preview/deflection-card': typeof PreviewDeflectionCardRoute
@@ -77,6 +86,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/preview/ask-more-section'
     | '/preview/clarification-card'
     | '/preview/decoder-card'
     | '/preview/deflection-card'
@@ -85,6 +95,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/preview/ask-more-section'
     | '/preview/clarification-card'
     | '/preview/decoder-card'
     | '/preview/deflection-card'
@@ -93,6 +104,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/preview/ask-more-section'
     | '/preview/clarification-card'
     | '/preview/decoder-card'
     | '/preview/deflection-card'
@@ -102,6 +114,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PreviewAskMoreSectionRoute: typeof PreviewAskMoreSectionRoute
   PreviewClarificationCardRoute: typeof PreviewClarificationCardRoute
   PreviewDecoderCardRoute: typeof PreviewDecoderCardRoute
   PreviewDeflectionCardRoute: typeof PreviewDeflectionCardRoute
@@ -153,11 +166,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PreviewClarificationCardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/preview/ask-more-section': {
+      id: '/preview/ask-more-section'
+      path: '/preview/ask-more-section'
+      fullPath: '/preview/ask-more-section'
+      preLoaderRoute: typeof PreviewAskMoreSectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PreviewAskMoreSectionRoute: PreviewAskMoreSectionRoute,
   PreviewClarificationCardRoute: PreviewClarificationCardRoute,
   PreviewDecoderCardRoute: PreviewDecoderCardRoute,
   PreviewDeflectionCardRoute: PreviewDeflectionCardRoute,
@@ -167,3 +188,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

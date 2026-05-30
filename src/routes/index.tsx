@@ -23,6 +23,7 @@ import { PillButton } from "@/components/insectalert/PillButton";
 import { IconSticker } from "@/components/insectalert/IconSticker";
 import { StickerTextarea } from "@/components/insectalert/StickerInput";
 import { EmailSignup } from "@/components/insectalert/EmailSignup";
+import { AskMoreSection } from "@/components/AskMoreSection";
 import { scanText, scanPhoto, type ScanResult } from "@/lib/insectalert-api";
 import { cn } from "@/lib/utils";
 
@@ -539,6 +540,8 @@ function ResultState({
       )}
 
       <FeedbackRow />
+
+      <AskMoreSection subjectName={isAlert ? firstMatch?.nlName : undefined} />
 
       <EmailSignup />
 

@@ -36,12 +36,12 @@ function PreviewAskMoreSectionPage() {
           <AskMoreSection />
         </section>
 
-        {/* Met prefill — zoals onder een "gevonden" resultaat (Fase 5) */}
+        {/* Met subjectName — zoals onder een "gevonden" resultaat (Fase 5) */}
         <section className="flex flex-col gap-2">
           <p className="px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Met prefill ("karmijn")
+            Met subjectName ("karmijn")
           </p>
-          <AskMoreSection prefill="Wat is karmijn?" />
+          <AskMoreSection subjectName="karmijn" />
         </section>
       </div>
     </main>
